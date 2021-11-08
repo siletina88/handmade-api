@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { tokenVerifyAndAdmin, tokenVerifyAndAuthorized } = require("./tokenVerify");
 const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 const router = require("express").Router();
 
@@ -30,8 +31,12 @@ router.put("/:id", tokenVerifyAndAuthorized, async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json(updatedUser);
+
+    const { password, ...others } = updatedUser._doc;
+
+    res.status(200).json({ ...others });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 });

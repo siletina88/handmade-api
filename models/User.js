@@ -10,11 +10,13 @@ const UserSchema = new mongoose.Schema(
     },
     isAdmin: { type: Boolean, default: false },
     img: { type: String },
-    fullName: { type: String },
-    address: { type: String },
-    phone: { type: String },
+    fullName: { type: String, default: "" },
+    address: { type: String, default: "" },
+    phone: { type: String, default: "" },
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart", autopopulate: true },
   },
   { timestamps: true }
 );
+UserSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("User", UserSchema);

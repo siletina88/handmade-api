@@ -1,19 +1,24 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true },
+    userId: { type: String },
     products: [
       {
         productId: { type: String },
         quantity: { type: Number, default: 1 },
       },
     ],
-    amount: { type: Number, required: true },
-    address: { type: Object, required: true },
-    status: { type: String, default: 'pending' },
+    total: { type: Number, required: true },
+    name: { type: String, required: true },
+    address: { type: String, required: true },
+    city: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
+    status: { type: String, default: "pending" },
   },
-  { timestamps: true },
-)
+  { timestamps: true }
+);
+OrderSchema.plugin(require("mongoose-autopopulate"));
 
-module.exports = mongoose.model('Order', OrderSchema)
+module.exports = mongoose.model("Order", OrderSchema);

@@ -4,7 +4,7 @@ const Order = require("../models/Order");
 
 //create
 
-router.post("/", tokenVerify, async (req, res) => {
+router.post("/", async (req, res) => {
   const newOrder = new Order(req.body);
 
   try {
