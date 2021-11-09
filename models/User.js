@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     img: { type: String },
     fullName: { type: String, default: "" },
     address: { type: String, default: "" },
+    city: { type: String, default: "" },
     phone: { type: String, default: "" },
     cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart", autopopulate: true },
   },

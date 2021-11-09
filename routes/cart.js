@@ -35,6 +35,26 @@ router.put("/add/:id", tokenVerify, async (req, res) => {
   }
 });
 
+//clear cart
+
+router.put("/clear/:id", tokenVerify, async (req, res) => {
+  try {
+    const clearedCart = await Cart.findByIdAndUpdate(
+      req.body.cartId,
+      {
+        products: [],
+        quantity: 0,
+        total: 0,
+      },
+      { new: true }
+    );
+
+    res.status(200).json(clearedCart);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 // remove product from cart
 
 router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
