@@ -4,49 +4,54 @@ const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
 //Register
-router.post("/register", async (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: CryptoJS.AES.encrypt(req.body.password, process.env.CRYPTO_SEC).toString(),
-  });
+// router.post("/register", async (req, res) => {
+//   const newUser = new User({
+//     username: req.body.username,
+//     email: req.body.email,
+//     password: CryptoJS.AES.encrypt(req.body.password, process.env.CRYPTO_SEC).toString(),
+//   });
 
-  try {
-    const savedUser = await newUser.save();
+//   try {
+//     const savedUser = await newUser.save();
 
-    res.status(201).json(savedUser);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+//     res.status(201).json(savedUser);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
 
-//Login
-router.post("/login", async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.body.username });
+const UserController = require("../controllers/UserController.js");
+router.post("/register", UserController.signup);
+router.post("/login", UserController.login);
+router.get("/verify/:id", UserController.verify);
 
-    !user && res.status(401).json("Wrong username");
+// //Login
+// router.post("/login", async (req, res) => {
+//   try {
+//     const user = await User.findOne({ username: req.body.username });
 
-    const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.CRYPTO_SEC);
-    const TruePassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+//     !user && res.status(401).json("Wrong username");
 
-    TruePassword !== req.body.password && res.status(401).json("Wrong Password");
+//     const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.CRYPTO_SEC);
+//     const TruePassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    const accessToken = jwt.sign(
-      {
-        id: user._id,
-        isAdmin: user.isAdmin,
-      },
-      process.env.JWT_SEC,
-      { expiresIn: "1d" }
-    );
+//     TruePassword !== req.body.password && res.status(401).json("Wrong Password");
 
-    const { password, ...others } = user._doc;
+//     const accessToken = jwt.sign(
+//       {
+//         id: user._id,
+//         isAdmin: user.isAdmin,
+//       },
+//       process.env.JWT_SEC,
+//       { expiresIn: "1d" }
+//     );
 
-    res.status(200).json({ ...others, accessToken });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+//     const { password, ...others } = user._doc;
+
+//     res.status(200).json({ ...others, accessToken });
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
 
 module.exports = router;

@@ -69,7 +69,10 @@ router.get("/", tokenVerifyAndAdmin, async (req, res) => {
 
 router.get("/get/:userId", tokenVerifyAndAuthorized, async (req, res) => {
   try {
-    const orders = await Order.find({ userId: `${req.params.userId}` }).exec();
+    const orders = await Order.find({ userId: `${req.params.userId}` })
+      .sort({ createdAt: "-1" })
+      .exec();
+
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json(error);
