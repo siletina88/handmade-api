@@ -41,7 +41,6 @@ const sendEmail = async (email, name, address, product, total) => {
     const profi = sasa(list);
     return profi;
   });
-  console.log(data);
 
   await transporter.sendMail({
     to: email,
