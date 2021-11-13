@@ -33,15 +33,17 @@ exports.signup = async (req, res) => {
   // Check we have an email
 
   if (!email) {
-    return res.status(422).send({ message: "Missing email." });
+    return res.status(422).json("Molimo vas da unesete email");
   }
   try {
     // Check if the email is in use
-    const existingUser = await User.findOne({ email }).exec();
+    const existingEmail = await User.findOne({ email }).exec();
+    if (existingEmail) {
+      return res.status(409).json("Email adresa je u upotrebi!");
+    }
+    const existingUser = await User.findOne({ username }).exec();
     if (existingUser) {
-      return res.status(409).send({
-        message: "Email is already in use.",
-      });
+      return res.status(409).json("Korisnicko ime je zauzeto!");
     }
     // Step 1 - Create and save the user
     const user = await new User({
@@ -294,9 +296,7 @@ exports.signup = async (req, res) => {
       </body>
     </html>`,
     });
-    return res.status(201).send({
-      message: `Sent a verification email to ${email}`,
-    });
+    return res.status(201).json(`Verifikacioni email je poslat na adresu ${email}`);
   } catch (err) {
     return res.status(500).send(err);
   }

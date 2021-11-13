@@ -2,14 +2,16 @@ const router = require("express").Router();
 const { tokenVerifyAndAdmin, tokenVerify, tokenVerifyAndAuthorized } = require("./tokenVerify");
 const Order = require("../models/Order");
 
+const mailer = require("../customFunctions/mailer.js");
 //create
 
 router.post("/", async (req, res) => {
   const newOrder = new Order(req.body);
+  const { email, name, address, products } = req.body;
 
   try {
     const savedOrder = await newOrder.save();
-    res.status(200).json(savedOrder);
+    mailer.sendEmail(email, name, address, products).then(res.status(200).json(savedOrder));
   } catch (error) {
     res.status(500).json(error);
   }
