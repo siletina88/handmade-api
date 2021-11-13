@@ -7,11 +7,11 @@ const mailer = require("../customFunctions/mailer.js");
 
 router.post("/", async (req, res) => {
   const newOrder = new Order(req.body);
-  const { email, name, address, products } = req.body;
+  const { email, name, address, products, total } = req.body;
 
   try {
     const savedOrder = await newOrder.save();
-    mailer.sendEmail(email, name, address, products).then(res.status(200).json(savedOrder));
+    mailer.sendEmail(email, name, address, products, total).then(res.status(200).json(savedOrder));
   } catch (error) {
     res.status(500).json(error);
   }

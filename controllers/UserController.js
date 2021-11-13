@@ -180,7 +180,7 @@ exports.signup = async (req, res) => {
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
                 <tr>
                   <td
-                    bgcolor="black"
+                    bgcolor="#12130f"
                     align="center"
                     valign="top"
                     style="
@@ -194,8 +194,9 @@ exports.signup = async (req, res) => {
                       line-height: 48px;
                     "
                   >
+                  <img src="https://i.ibb.co/Tc2DZ7W/logo6.png" width="200" height="140" style="display: block; border: 0px" />
                     <h1 style="font-size: 48px; font-weight: 400; margin: 10; color: white">Dobrodošli!</h1>
-                    <img src="https://i.ibb.co/Tc2DZ7W/logo6.png" width="200" height="140" style="display: block; border: 0px" />
+                  
                   </td>
                 </tr>
               </table>
@@ -263,7 +264,7 @@ exports.signup = async (req, res) => {
                     align="left"
                     style="padding: 20px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
                   >
-                    <p style="margin: 0"><a href="#" target="_blank" style="color: #f82c73">${url}</a></p>
+                    <p style="margin: 0; font-size: 12px"><a href="#" target="_blank" style="color: #f82c73">${url}</a></p>
                   </td>
                 </tr>
                 <tr>
@@ -293,6 +294,7 @@ exports.signup = async (req, res) => {
                
           </tr>
         </table>
+        <div style="height: 70px"></div>
       </body>
     </html>`,
     });

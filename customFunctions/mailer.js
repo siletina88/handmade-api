@@ -15,8 +15,8 @@ const doSomethingAsync = async (item) => {
 
 const findProduct = async (item) => {
   const singleProduct = await Product.findById(item._id);
-  const { title, img } = singleProduct;
-  return Promise.resolve({ quantity: item.quantity, name: title, img });
+  const { title, img, price } = singleProduct;
+  return Promise.resolve({ quantity: item.quantity, name: title, img, price });
 };
 
 const getData = async (product) => {
@@ -26,15 +26,18 @@ const getData = async (product) => {
 const sasa = (items) => {
   const names = [];
   items.map((item) => {
-    names.push(`<div class="productContainer"><img class="image" src="${item.img}"/>${item.name} X ${item.quantity}</div>`);
+    names.push(
+      `<div class="productContainer"><img class="image" src="${item.img}"/><p class="product" style="justify-content: space-between">${item.name} x ${item.quantity}<span>${
+        item.price * item.quantity
+      } KM</span></p></div>`
+    );
   });
   const solved = names.join("");
   return `${solved}`;
 };
 
-const sendEmail = async (email, name, address, product) => {
+const sendEmail = async (email, name, address, product, total) => {
   const data = await getData(product).then((list) => {
-    // console.log(list);
     const profi = sasa(list);
     return profi;
   });
@@ -93,6 +96,7 @@ const sendEmail = async (email, name, address, product) => {
         td {
           mso-table-lspace: 0pt;
           mso-table-rspace: 0pt;
+        
         }
   
         img {
@@ -116,23 +120,17 @@ const sendEmail = async (email, name, address, product) => {
         body {
           height: 100% !important;
           margin: 0 !important;
-          padding: 0 !important;
+          padding: 20px !important;
           width: 100% !important;
         }
         .image {
           width: 40px;
           height: 40px;
           border-radius: 50%;
+          margin-right: 10px;
+          
         }
-        .productContainer {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          color: black;
-          font-weight: bold;
-        }
-  
+       
         /* iOS BLUE LINKS */
         a[x-apple-data-detectors] {
           color: inherit !important;
@@ -155,13 +153,66 @@ const sendEmail = async (email, name, address, product) => {
         div[style*="margin: 16px 0;"] {
           margin: 0 !important;
         }
+
+        .container {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid lightgray;
+          border-radius: 4px;
+          margin-bottom: 20px;
+      }
+      .productContainer {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        font-weight: 400;
+        line-height: 10px;
+        font-size: 16px;
+    
+  
+      }
+      .product {
+          width: 100%;
+      
+      }
+
+      .product > span  {
+        display: block;
+        width: 20%;
+        text-align: right;
+        float: right;
+     }
+
+      .totalContainer {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          border-top: 1px solid rgba(0, 0, 0, 0.075);
+          color: black;
+          font-weight: bold;
+      }
+      .total  {
+         display: block;
+         width: 100%;
+         text-align: right;
+         float: right;
+      }
+      .total > span {
+        padding-left: 10px;
+      }
+
+
+
       </style>
     </head>
   
     <body style="background-color: #a9a9a9; margin: 0 !important; padding: 0 !important">
       <!-- HIDDEN PREHEADER TEXT -->
       <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden">
-       Vasa narudzba je zaprimljena. Hvala!
+       Vasa narudzba je zaprimljena. - Corrine's Accessories
       </div>
       <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
@@ -179,7 +230,7 @@ const sendEmail = async (email, name, address, product) => {
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
               <tr>
                 <td
-                  bgcolor="black"
+                  bgcolor="#12130f"
                   align="center"
                   valign="top"
                   style="
@@ -193,8 +244,9 @@ const sendEmail = async (email, name, address, product) => {
                     line-height: 48px;
                   "
                 >
-                  <h1 style="font-size: 48px; font-weight: 400; margin: 10; color: white">Dobrodošli!</h1>
+                
                   <img src="https://i.ibb.co/Tc2DZ7W/logo6.png" width="200" height="140" style="display: block; border: 0px" />
+                  <h1 style="font-size: 48px; font-weight: 400; margin: 10; color: white">Hvala Vam!</h1>
                 </td>
               </tr>
             </table>
@@ -207,51 +259,23 @@ const sendEmail = async (email, name, address, product) => {
                 <td
                   bgcolor="#ffffff"
                   align="left"
-                  style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
+                  style="padding: 20px 30px 10px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
                 >
-                  <p style="margin: 0">Vasa narudzba je zaprimljena. Zahvaljujemo se na koristenju nase webshop aplikacije!</p>
+                  <p style="margin: 0">Pozdrav, <strong>${name}</strong>.</p><p> Vasa narudzba je zaprimljena! Trenutno radimo na <strong>procesuiranju</strong>  narudzbe. Bicete obavjesteni novim emailom kada vasa narudzba bude poslata.</p><p>Detalji vase narudzbe :</p>
+                  <div class="container">
+                 
                   ${data}
+                  <div class="totalContainer"><p class="total">UKUPNO<span>${total.toFixed(2)} KM</span></p></div>
+                  </div>
                 </td>
               </tr>
-              <tr>
-                <td bgcolor="#ffffff" align="left">
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                      <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px">
-                        <table border="0" cellspacing="0" cellpadding="0">
-                          <tr>
-                            <td align="center" style="border-radius: 3px" bgcolor="#f82c73">
-                              <a
-                                href=""
-                                target="_blank"
-                                style="
-                                  font-size: 20px;
-                                  font-family: Helvetica, Arial, sans-serif;
-                                  color: #ffffff;
-                                  text-decoration: none;
-                                  color: #ffffff;
-                                  text-decoration: none;
-                                  padding: 10px 25px;
-                                  border-radius: 2px;
-                                  border: 1px solid #f82c73;
-                                  display: inline-block;
-                                "
-                                >Vasa narudzba</a
-                              >
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
+            
               <!-- COPY -->
               <tr>
                 <td
                   bgcolor="#ffffff"
                   align="left"
-                  style="padding: 0px 30px 0px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
+                  style="padding: 0px 10px 0px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
                 >
                   <p style="margin: 0">Na nasoj web stranici mozete pratiti sve vase narudzbe!</p>
                 </td>
@@ -261,7 +285,7 @@ const sendEmail = async (email, name, address, product) => {
                 <td
                   bgcolor="#ffffff"
                   align="left"
-                  style="padding: 20px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
+                  style="padding: 0px 30px 10px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 15px"
                 >
                   <p style="margin: 0"><a href="#" target="_blank" style="color: #f82c73"></a></p>
                 </td>
@@ -272,7 +296,7 @@ const sendEmail = async (email, name, address, product) => {
                   align="left"
                   style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
                 >
-                  <p style="margin: 0">Ako vam je potrebna bilo kakva pomoc, samo odgovorite nazad na ovu email adresu i tu smo za Vas</p>
+                  <p style="margin: 0">Ako vam je potrebna bilo kakva pomoc, samo odgovorite nazad na ovu email adresu i tu smo za Vas!</p>
                 </td>
               </tr>
               <tr>
@@ -289,10 +313,11 @@ const sendEmail = async (email, name, address, product) => {
                     line-height: 25px;
                   "
                 >
-                  <p style="margin: 0">Ugodan dan,<br />Corinne's Accessories</p>
+                  <p style="margin: 0">Ugodan dan,<br /><strong>Corinne's Accessories</strong></p>
              
         </tr>
       </table>
+      <div style="height: 70px"></div>
     </body>
   </html>`,
   });
