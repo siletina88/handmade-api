@@ -127,6 +127,7 @@ const sendEmail = async (email, name, address, product, total) => {
           height: 40px;
           border-radius: 50%;
           margin-right: 10px;
+          object-fit: cover;
           
         }
        

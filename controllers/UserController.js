@@ -399,7 +399,7 @@ exports.verify = async (req, res) => {
     // Step 3 - Update user verification status to true
     user.verified = true;
     await user.save();
-    res.redirect("http://localhost:3000/login");
+    res.redirect(`${process.env.FRONTEND_URL}login`);
     return res.status(200).json("Uspjesno ste verifikovali vasu email adresu. Hvala Vam!");
   } catch (err) {
     return res.status(500).send(err);
