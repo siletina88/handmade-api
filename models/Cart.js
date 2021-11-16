@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const CartItemSchema = new mongoose.Schema({
   product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", autopopulate: true },
   quantity: { type: Number, default: 1 },
+  color: { type: String },
+  size: { type: String },
 });
 CartItemSchema.plugin(require("mongoose-autopopulate"));
 

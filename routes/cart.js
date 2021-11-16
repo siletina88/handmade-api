@@ -64,7 +64,7 @@ router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
 
       {
         $inc: { quantity: -1, total: -req.body.cartPrice },
-        $pull: { products: { product: req.params.productId } },
+        $pull: { products: { _id: req.params.productId } },
       },
       { new: true }
     );
