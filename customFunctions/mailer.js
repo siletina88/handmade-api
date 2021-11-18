@@ -16,7 +16,7 @@ const doSomethingAsync = async (item) => {
 const findProduct = async (item) => {
   const singleProduct = await Product.findById(item._id);
   const { title, img, price } = singleProduct;
-  return Promise.resolve({ quantity: item.quantity, name: title, img, price });
+  return Promise.resolve({ quantity: item.quantity, name: title, img, price, color: item.color, size: item.size });
 };
 
 const getData = async (product) => {
@@ -27,9 +27,11 @@ const sasa = (items) => {
   const names = [];
   items.map((item) => {
     names.push(
-      `<div class="productContainer"><img class="image" src="${item.img}"/><p class="product" style="justify-content: space-between">${item.name} x ${item.quantity}<span>${
-        item.price * item.quantity
-      } KM</span></p></div>`
+      `  <table class="table"><tr class="trow"><td class="imageTd"><img class="image" src="${item.img}"/></td><td class="productInfoTd"><div class="product">${item.name} x ${
+        item.quantity
+      }</div><table><tr><td><div class="colorContainer">Boja:</div></td><td><span class="color" style="background: ${item.color}"></span></td></tr></table><div class="size">Velicina: <span>${
+        item.size
+      }</span></div></td><td class="priceContainerTd"><div class="price">${item.price * item.quantity} KM</div></td></tr></table>`
     );
   });
   const solved = names.join("");
@@ -160,31 +162,70 @@ const sendEmail = async (email, name, address, product, total) => {
           border: 1px solid lightgray;
           border-radius: 4px;
           margin-bottom: 20px;
-      }
-      .productContainer {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: black;
-        font-weight: 400;
-        line-height: 10px;
-        font-size: 16px;
-    
-  
-      }
-      .product {
+        }
+        .table {
+          border-bottom: 1px solid lightgray;
+          font-size: 12px;
+          color: rgb(70, 70, 70);
           width: 100%;
-      
-      }
-
-      .product > span  {
-        display: block;
-        width: 20%;
-        text-align: right;
-        float: right;
-     }
-
+        }
+        .trow {
+          width: 100%;
+        }
+        .imageTd {
+          width:60px;
+          height:60px;
+          
+  
+        }
+        .image {
+          
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          object-fit:cover;
+        }
+        .productInfoTd {
+  
+        }
+        .colorContainer {
+          color: gray;
+          display: inline-block;
+     
+          
+        }
+  
+        .color {
+          display: inline-block;
+         
+          width: 20px;
+          height: 20px;
+          object-fit:cover;
+   
+          border-radius: 50%;
+          border: 1px solid whitesmoke;
+         
+  
+        }
+        .size {
+          color: gray;
+     
+        
+  
+        }
+        .size > span {
+          color: black;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+        .priceContainerTd {
+          margin-left: auto;
+          
+        }
+        .price {
+          text-align: right;
+          font-weight: bold;
+        }
       .totalContainer {
           width: 100%;
           display: flex;
@@ -259,7 +300,7 @@ const sendEmail = async (email, name, address, product, total) => {
                 <td
                   bgcolor="#ffffff"
                   align="left"
-                  style="padding: 20px 30px 10px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px"
+                  style="padding: 20px 30px 10px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px; width: 100%;"
                 >
                   <p style="margin: 0">Pozdrav, <strong>${name}</strong>.</p><p> Vasa narudzba je zaprimljena! Trenutno radimo na <strong>procesuiranju</strong>  narudzbe. Bicete obavjesteni novim emailom kada vasa narudzba bude poslata.</p><p>Detalji vase narudzbe :</p>
                   <div class="container">

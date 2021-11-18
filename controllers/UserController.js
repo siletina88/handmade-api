@@ -298,7 +298,7 @@ exports.signup = async (req, res) => {
       </body>
     </html>`,
     });
-    return res.status(201).json(`Verifikacioni email je poslat na adresu ${email}`);
+    return res.status(201).json(`ok`);
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -370,8 +370,8 @@ exports.login = async (req, res) => {
     } catch (error) {
       res.status(500).json(error);
     }
-  } catch (err) {
-    return res.status(500).send(err);
+  } catch (error) {
+    return res.status(500).send(error);
   }
 };
 
@@ -399,7 +399,7 @@ exports.verify = async (req, res) => {
     // Step 3 - Update user verification status to true
     user.verified = true;
     await user.save();
-    res.redirect(`${process.env.FRONTEND_URL}login`);
+    res.redirect(`${process.env.FRONTEND_URL}verified`);
     return res.status(200).json("Uspjesno ste verifikovali vasu email adresu. Hvala Vam!");
   } catch (err) {
     return res.status(500).send(err);
