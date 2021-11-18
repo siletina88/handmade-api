@@ -29,9 +29,11 @@ const sasa = (items) => {
     names.push(
       `  <table class="table"><tr class="trow"><td class="imageTd"><img class="image" src="${item.img}"/></td><td class="productInfoTd"><div class="product">${item.name} x ${
         item.quantity
-      }</div><table><tr><td><div class="colorContainer">Boja:</div></td><td><span class="color" style="background: ${item.color}"></span></td></tr></table><div class="size">Velicina: <span>${
-        item.size
-      }</span></div></td><td class="priceContainerTd"><div class="price">${item.price * item.quantity} KM</div></td></tr></table>`
+      }</div><table><tr><td><div class="colorContainer">Boja:</div></td><td class="colorTd"><span class="color" style="background: ${
+        item.color
+      }"></span></td></tr></table><div class="size">Velicina: <span>${item.size}</span></div></td><td class="priceContainerTd"><div class="price">${
+        item.price * item.quantity
+      } KM</div></td></tr></table>`
     );
   });
   const solved = names.join("");
@@ -194,6 +196,10 @@ const sendEmail = async (email, name, address, product, total) => {
      
           
         }
+        .colorTd {
+          padding-top: 7px;
+          padding-left: 3px;
+        }
   
         .color {
           display: inline-block;
@@ -203,7 +209,7 @@ const sendEmail = async (email, name, address, product, total) => {
           object-fit:cover;
    
           border-radius: 50%;
-          border: 1px solid whitesmoke;
+     
          
   
         }

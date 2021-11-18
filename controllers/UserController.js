@@ -298,7 +298,7 @@ exports.signup = async (req, res) => {
       </body>
     </html>`,
     });
-    return res.status(201).json(`ok`);
+    return res.status(201).json(`Verifikacioni email je poslat na adresu ${email}`);
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -339,8 +339,10 @@ exports.login = async (req, res) => {
   if (!username) {
     return res.status(422).send("Molimo vas da ukucate korisnicko ime!");
   }
+
+  // Step 1 - Verify a user with the username
+
   try {
-    // Step 1 - Verify a user with the username
     const user = await User.findOne({ username }).exec();
     if (!user) {
       return res.status(404).json("Korisnik sa tim korisnickim imenom ne postoji!");
@@ -349,12 +351,13 @@ exports.login = async (req, res) => {
     if (!user.verified) {
       return res.status(403).json("Molimo vas da verifikujete vasu email adresu pomocu linka koji ste dobili na vas email!");
     }
-    try {
-      const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.CRYPTO_SEC);
-      const TruePassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-      TruePassword !== req.body.password && res.status(401).json("Pogresna sifra!");
+    const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.CRYPTO_SEC);
+    const TruePassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
+    if (TruePassword !== req.body.password) {
+      return res.status(401).json("Pogresna sifra!");
+    } else {
       const accessToken = jwt.sign(
         {
           id: user._id,
@@ -366,41 +369,37 @@ exports.login = async (req, res) => {
 
       const { password, ...others } = user._doc;
 
-      res.status(200).json({ ...others, accessToken });
-    } catch (error) {
-      res.status(500).json(error);
+      return res.status(200).json({ ...others, accessToken });
     }
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).json(error);
   }
 };
 
 exports.verify = async (req, res) => {
   const token = req.params.id;
-  console.log(req.params);
 
   // Check we have an id
-  if (!token) {
-    return res.status(422).json("Greska! Nepostojeci token");
-  }
+
   // Step 1 -  Verify the token from the URL
-  let payload = null;
+
   try {
+    if (!token) {
+      return res.status(422).json("Greska! Nepostojeci token");
+    }
+    let payload = null;
+
     payload = jwt.verify(token, process.env.USER_VERIFICATION_TOKEN_SECRET);
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-  try {
     // Step 2 - Find user with matching ID
     const user = await User.findOne({ _id: payload.ID }).exec();
     if (!user) {
       return res.status(404).json("Greska, Korisnik ne postoji");
     }
-    // Step 3 - Update user verification status to true
     user.verified = true;
     await user.save();
-    res.redirect(`${process.env.FRONTEND_URL}verified`);
-    return res.status(200).json("Uspjesno ste verifikovali vasu email adresu. Hvala Vam!");
+    return res.redirect("http://localhost:3000/verified");
+
+    // Step 3 - Update user verification status to true
   } catch (err) {
     return res.status(500).send(err);
   }
