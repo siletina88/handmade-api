@@ -9,6 +9,7 @@ const tokenVerify = (req, res, next) => {
       if (err) res.status(403).json("Token is not valid");
       req.user = user;
       next();
+      return;
     });
   } else {
     return res.status(401).json("You are not authenticated");
@@ -19,9 +20,10 @@ const tokenVerifyAndAuthorized = (req, res, next) => {
   tokenVerify(req, res, () => {
     if (req.body._id === req.params.id || req.user.isAdmin) {
       next();
+      return;
     } else {
       console.log(req.body);
-      res.status(403).json("You are not allowed");
+      return res.status(403).json("You are not allowed");
     }
   });
 };
@@ -29,8 +31,9 @@ const tokenVerifyAndAdmin = (req, res, next) => {
   tokenVerify(req, res, () => {
     if (req.user?.isAdmin) {
       next();
+      return;
     } else {
-      res.status(403).json("YOu are not allowed");
+      return res.status(403).json("YOu are not allowed");
     }
   });
 };
