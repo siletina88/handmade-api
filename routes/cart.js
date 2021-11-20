@@ -10,9 +10,9 @@ router.post("/", tokenVerify, async (req, res) => {
 
   try {
     const savedCart = await newCart.save();
-    res.status(200).json(savedCart);
+    return res.status(200).json(savedCart);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -28,10 +28,9 @@ router.put("/add/:id", tokenVerify, async (req, res) => {
       },
       { new: true }
     );
-
-    res.status(200).json(updatedCart);
+    return res.status(200).json(updatedCart);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -49,9 +48,9 @@ router.put("/clear/:id", tokenVerify, async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(clearedCart);
+    return res.status(200).json(clearedCart);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -69,9 +68,9 @@ router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updatedCart);
+    return res.status(200).json(updatedCart);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -80,9 +79,9 @@ router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
 router.delete("/:id", tokenVerifyAndAuthorized, async (req, res) => {
   try {
     await Cart.findByIdAndDelete(req.params.id);
-    res.status(200).json("Cart has been deleted");
+    return res.status(200).json("Cart has been deleted");
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -91,9 +90,9 @@ router.delete("/:id", tokenVerifyAndAuthorized, async (req, res) => {
 router.get("/find/:userId", async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.params.userId });
-    res.status(200).json(cart);
+    return res.status(200).json(cart);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
@@ -102,9 +101,9 @@ router.get("/find/:userId", async (req, res) => {
 router.get("/", tokenVerifyAndAdmin, async (req, res) => {
   try {
     const carts = await Cart.find();
-    res.status(200).json(carts);
+    return res.status(200).json(carts);
   } catch (error) {
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 

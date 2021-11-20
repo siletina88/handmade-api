@@ -3,6 +3,7 @@ const CryptoJS = require("crypto-js");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.js");
+
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
@@ -397,7 +398,7 @@ exports.verify = async (req, res) => {
     }
     user.verified = true;
     await user.save();
-    return res.redirect("http://localhost:3000/verified");
+    return res.redirect(`${process.env.FRONTEND_URL}/verified`);
 
     // Step 3 - Update user verification status to true
   } catch (err) {
