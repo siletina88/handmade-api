@@ -18,7 +18,7 @@ router.post("/", tokenVerify, async (req, res) => {
 
 //add product to cart
 
-router.put("/add/:id", tokenVerify, async (req, res) => {
+router.put("/add/:id", async (req, res) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       req.body.cartId,
@@ -28,7 +28,7 @@ router.put("/add/:id", tokenVerify, async (req, res) => {
       },
       { new: true }
     );
-    return res.status(200).json(updatedCart);
+    return res.status(200).send(updatedCart);
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -36,7 +36,7 @@ router.put("/add/:id", tokenVerify, async (req, res) => {
 
 //clear cart
 
-router.put("/clear/:id", tokenVerify, async (req, res) => {
+router.put("/clear/:id", async (req, res) => {
   try {
     const clearedCart = await Cart.findByIdAndUpdate(
       req.body.cartId,
@@ -56,7 +56,7 @@ router.put("/clear/:id", tokenVerify, async (req, res) => {
 
 // remove product from cart
 
-router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
+router.put("/remove/:cartId/:productId", async (req, res) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       req.params.cartId,
