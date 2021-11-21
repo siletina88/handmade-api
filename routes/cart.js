@@ -18,7 +18,7 @@ router.post("/", tokenVerify, async (req, res) => {
 
 //add product to cart
 
-router.put("/add/:id", async (req, res) => {
+router.put("/add/:id", tokenVerify, async (req, res) => {
   try {
     const updatedCart = await Cart.findByIdAndUpdate(
       req.body.cartId,
@@ -56,14 +56,15 @@ router.put("/clear/:id", async (req, res) => {
 
 // remove product from cart
 
-router.put("/remove/:cartId/:productId", async (req, res) => {
+router.put("/remove/:cartId/:productId", tokenVerify, async (req, res) => {
   try {
+    console.log(req.params);
     const updatedCart = await Cart.findByIdAndUpdate(
       req.params.cartId,
 
       {
-        $inc: { quantity: -1, total: -req.body.cartPrice },
-        $pull: { products: { _id: req.params.productId } },
+        $inc: { quantity: -1 },
+        $pull: { products: { product: req.params.productId } },
       },
       { new: true }
     );
