@@ -20,10 +20,10 @@ router.post("/", tokenVerifyAndAdmin, async (req, res) => {
 
 //Update user
 router.put("/:id", tokenVerifyAndAuthorized, async (req, res) => {
-  if (req.body.password) {
-    req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.CRYPTO_SEC).toString();
-  }
   try {
+    if (req.body.password) {
+      req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.CRYPTO_SEC).toString();
+    }
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
@@ -34,10 +34,10 @@ router.put("/:id", tokenVerifyAndAuthorized, async (req, res) => {
 
     const { password, ...others } = updatedUser._doc;
 
-    res.status(200).json({ ...others });
+    return res.status(200).json({ ...others });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    return res.status(500).json(error);
   }
 });
 
